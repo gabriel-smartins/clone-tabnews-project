@@ -24,13 +24,13 @@ const clearDatabase = async () => {
 };
 
 const runPendingMigrations = async () => {
-  await migrator.runPendingMigrations()
-}
+  await migrator.runPendingMigrations();
+};
 
 const orchestrator = {
   waitForAllServices,
   clearDatabase,
-  runPendingMigrations
+  runPendingMigrations,
 };
 
 export default orchestrator;

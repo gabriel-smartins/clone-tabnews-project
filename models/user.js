@@ -18,27 +18,27 @@ async function findOneByUsername(username) {
         LIMIT
           1
       ;`,
-      values: [username]
+      values: [username],
     });
 
     if (results.rowCount < 1) {
       throw new NotFoundError({
         message: "O username informado não foi encontrado nos sistema.",
         action: "Verifique se o username está digitado corretamente.",
-      })
+      });
     }
 
-    return results.rows[0]
+    return results.rows[0];
   }
 }
 
 async function create(userInputValues) {
-  await validateUniqueEmail(userInputValues.email)
-  await validateUniqueUsername(userInputValues.username)
+  await validateUniqueEmail(userInputValues.email);
+  await validateUniqueUsername(userInputValues.username);
 
-  const newUser = await runInsertQuery(userInputValues)
+  const newUser = await runInsertQuery(userInputValues);
 
-  return newUser
+  return newUser;
 
   async function validateUniqueEmail(email) {
     const results = await database.query({
@@ -50,14 +50,14 @@ async function create(userInputValues) {
         WHERE
           LOWER(email) = LOWER($1)
       ;`,
-      values: [email]
+      values: [email],
     });
 
     if (results.rowCount > 0) {
       throw new ValidationError({
         message: "o email informado já está sendo utilizado.",
-        action: "utilize outro email para realizar o cadastro."
-      })
+        action: "utilize outro email para realizar o cadastro.",
+      });
     }
   }
 
@@ -71,14 +71,14 @@ async function create(userInputValues) {
         WHERE
         LOWER(username) = LOWER($1)
       ;`,
-      values: [username]
-    })
+      values: [username],
+    });
 
     if (results.rowCount > 0) {
       throw new ValidationError({
         message: "o username informado já está sendo utilizado.",
-        action: "utilize outro username para realizar o cadastro."
-      })
+        action: "utilize outro username para realizar o cadastro.",
+      });
     }
   }
 
@@ -95,17 +95,17 @@ async function create(userInputValues) {
       values: [
         userInputValues.username,
         userInputValues.email,
-        userInputValues.password]
+        userInputValues.password,
+      ],
     });
 
-    return results.rows[0]
-
+    return results.rows[0];
   }
 }
 
 const user = {
   create,
-  findOneByUsername
-}
+  findOneByUsername,
+};
 
 export default user;

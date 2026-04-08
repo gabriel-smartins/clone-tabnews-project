@@ -3,19 +3,19 @@ exports.up = (pgm) => {
     id: {
       type: "uuid",
       primaryKey: true,
-      default: pgm.func("gen_random_uuid()")
+      default: pgm.func("gen_random_uuid()"),
     },
     // For reference, Github limits usernames to 39 characters.
     username: {
       type: "varchar(30)",
       notNull: true,
-      unique: true
+      unique: true,
     },
     // Why 254 in length? https://stackoverflow.com/a/1199238
     email: {
       type: "varchar(254)",
       notNull: true,
-      unique: true
+      unique: true,
     },
     // Why 60 in length? https://www.npmjs.com/package/bcrypt#hash-info
     password: {
@@ -26,14 +26,14 @@ exports.up = (pgm) => {
     created_at: {
       type: "timestamptz",
       notNull: true,
-      default: pgm.func("timezone('utc', now())")
+      default: pgm.func("timezone('utc', now())"),
     },
     updated_at: {
       type: "timestamptz",
       notNull: true,
-      default: pgm.func("timezone('utc', now())")
-    }
+      default: pgm.func("timezone('utc', now())"),
+    },
   });
 };
 
-exports.down = false
+exports.down = false;
