@@ -33,11 +33,11 @@ describe("PATCH to api/v1/users/[username]", () => {
     test("Duplicated username", async () => {
       await orchestrator.createUser({
         username: "user1",
-      })
+      });
 
       await orchestrator.createUser({
         username: "user2",
-      })
+      });
 
       const response = await fetch("http://localhost:3000/api/v1/users/user2", {
         method: "PATCH",
@@ -61,14 +61,13 @@ describe("PATCH to api/v1/users/[username]", () => {
     });
 
     test("Duplicated email", async () => {
-
       await orchestrator.createUser({
         email: "email1@email.com",
-      })
+      });
 
       const user2 = await orchestrator.createUser({
         email: "email2@email.com",
-      })
+      });
 
       const response = await fetch(
         `http://localhost:3000/api/v1/users/${user2.username}`,
@@ -97,7 +96,7 @@ describe("PATCH to api/v1/users/[username]", () => {
     test("With unique 'username'", async () => {
       await orchestrator.createUser({
         username: "uniqueUser1",
-      })
+      });
 
       const response = await fetch(
         "http://localhost:3000/api/v1/users/uniqueUser1",
@@ -108,7 +107,7 @@ describe("PATCH to api/v1/users/[username]", () => {
           },
           body: JSON.stringify({
             username: "uniqueUser2",
-            email: "uniqueUser1@email.com"
+            email: "uniqueUser1@email.com",
           }),
         },
       );
@@ -133,11 +132,10 @@ describe("PATCH to api/v1/users/[username]", () => {
     });
 
     test("With unique 'email'", async () => {
-
       await orchestrator.createUser({
         username: "uniqueEmail",
         email: "uniqueEmail1@email.com",
-      })
+      });
 
       const response = await fetch(
         "http://localhost:3000/api/v1/users/uniqueEmail",
@@ -175,7 +173,7 @@ describe("PATCH to api/v1/users/[username]", () => {
       await orchestrator.createUser({
         username: "newPassword",
         email: "newPassword@email.com",
-      })
+      });
 
       const response = await fetch(
         "http://localhost:3000/api/v1/users/newPassword",
