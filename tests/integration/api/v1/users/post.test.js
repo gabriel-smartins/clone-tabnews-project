@@ -1,5 +1,7 @@
 import { version as uuidVersion } from "uuid";
-import orchestrator from "tests/orchestrator";
+import orchestrator from "tests/orchestrator.js";
+import user from "models/user.js";
+import password from "models/password.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -29,7 +31,7 @@ describe("POST to api/v1/users", () => {
         id: responseBody.id,
         username: "gab.mrt",
         email: "gab@email.com",
-        password: "gab123",
+        password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -37,6 +39,19 @@ describe("POST to api/v1/users", () => {
       expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+
+      const userInDatabase = await user.findOneByUsername("gab.mrt");
+      const passwordMatches = await password.compare(
+        "gab123",
+        userInDatabase.password,
+      );
+      const passwordDoesNotMatches = await password.compare(
+        "gab123",
+        "invalidPassword",
+      );
+
+      expect(passwordMatches).toBe(true);
+      expect(passwordDoesNotMatches).toBe(false);
     });
 
     test("Duplicated email", async () => {
@@ -71,7 +86,7 @@ describe("POST to api/v1/users", () => {
       expect(response2Body).toEqual({
         name: "ValidationError",
         message: "o email informado já está sendo utilizado.",
-        action: "utilize outro email para realizar o cadastro.",
+        action: "utilize outro email para esta operação.",
         status_code: 400,
       });
     });
@@ -108,7 +123,7 @@ describe("POST to api/v1/users", () => {
       expect(response2Body).toEqual({
         name: "ValidationError",
         message: "o username informado já está sendo utilizado.",
-        action: "utilize outro username para realizar o cadastro.",
+        action: "utilize outro username para esta operação.",
         status_code: 400,
       });
     });
