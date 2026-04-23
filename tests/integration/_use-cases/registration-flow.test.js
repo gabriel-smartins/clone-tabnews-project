@@ -81,7 +81,20 @@ describe("Use case: Registration Flow (all successful)", () => {
   })
 
   test("Login", async () => {
+    const createSessionResponse = await fetch("http://localhost:3000/api/v1/sessions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "registration.flow@teste.com",
+          password: "RegistrationFlowPassword"
+        }),
+      },
+    );
 
+    expect(createSessionResponse.status).toBe(201);
   })
 
   test("Get user information", async () => {
